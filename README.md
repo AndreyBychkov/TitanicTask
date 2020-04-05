@@ -17,4 +17,4 @@ We store data in [data](data) folder.
 Use `TitanicModel` module to train the model.
 After training model with supplementary files is stored in [data/model](data/model) directory.
 
-Run `main.kt` to use out model for making `submission.csv`.
+Run `main.kt` to use our model for making `submission.csv`.
