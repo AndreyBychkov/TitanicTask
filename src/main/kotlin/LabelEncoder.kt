@@ -8,13 +8,12 @@ class LabelEncoder(
 
     private val classesMap = classes.mapIndexed { index, s -> s to index }.toMap()
 
-    fun encode(x: String): Int {
-        return classesMap[x] ?: error("Cannot encode variable: class is not recognized")
-    }
+    fun encode(x: String) =
+        classesMap[x] ?: error("Cannot encode variable: class is not recognized")
 
-    fun encode(x: Collection<String>): List<Int> {
-        return x.map { encode(it) }
-    }
+
+    fun encode(x: Collection<String>) =
+        x.map { encode(it) }
 
     companion object {
         fun readFromFile(filename: String): LabelEncoder {

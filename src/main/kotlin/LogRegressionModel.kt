@@ -17,9 +17,8 @@ class LogRegressionModel(val coefficients: LogRegressionCoefficients) {
         return probability
     }
 
-    fun predictOutcome(x: Collection<Float>): Int {
-        return predictProbability(x).roundToInt()
-    }
+    fun predictOutcome(x: Collection<Float>) =
+        predictProbability(x).roundToInt()
 
     private fun scalarComposition(first: Collection<Float>, second: Collection<Float>) =
         first.zip(second).map { it.first * it.second }.sum()
@@ -32,6 +31,11 @@ class LogRegressionModel(val coefficients: LogRegressionCoefficients) {
             } else {
                 error("Can not parse Logistic Regression coefficients from file")
             }
+        }
+
+        fun readFromFile(filename: String): LogRegressionModel {
+            val file = File(filename)
+            return readFromFile(file)
         }
     }
 }

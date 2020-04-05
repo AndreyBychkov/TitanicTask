@@ -8,7 +8,8 @@ data class LogRegressionCoefficients(
     val Embarked: Float,
     val Intercept: Float
 ) {
-    fun asList(): List<Float> {
-        return listOf(Pclass, Sex, Age, SibSp, Parch, Fare, Embarked, Intercept)
-    }
+
+    fun asList(): List<Float>
+        = listOf(Pclass, Sex, Age, SibSp, Parch, Fare, Embarked, Intercept)
+
 }

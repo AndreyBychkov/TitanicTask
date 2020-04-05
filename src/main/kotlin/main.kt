@@ -6,7 +6,6 @@ import kotlin.math.roundToInt
 fun <T> Array<T?>.replaceNull(replacement: T): Collection<T> =
     map { it ?: replacement }
 
-
 fun encodeCategoricalColumns(data: DataFrame, encoders: List<LabelEncoder>): DataFrame {
     var encodedData = data
     encoders.forEach { encoder ->
