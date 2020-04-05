@@ -22,23 +22,23 @@ def train_model(train_data_file: str, output_dir: str):
     log.info("Start processing.")
 
     df = pd.read_csv(train_data_file)
-    preprocess_dataframe(df, output_dir)
-    model = train_log_regression_model(df)
-    save_model(model, df, output_dir)
+    _preprocess_dataframe(df, output_dir)
+    model = _train_log_regression_model(df)
+    _save_model(model, df, output_dir)
 
     log.info("Model trained.")
 
 
-def preprocess_dataframe(df: pd.DataFrame, output_dir: str):
+def _preprocess_dataframe(df: pd.DataFrame, output_dir: str):
     log.info("Preprocessing DataFrame...")
 
     df.drop(columns=['PassengerId', 'Name', 'Ticket', 'Cabin'], inplace=True)
 
-    preprocess_categorical_data(df, output_dir)
-    impute_data(df)
+    _preprocess_categorical_data(df, output_dir)
+    _impute_data(df)
 
 
-def preprocess_categorical_data(df: pd.DataFrame, output_dir: str):
+def _preprocess_categorical_data(df: pd.DataFrame, output_dir: str):
     for obj_col in df.select_dtypes('object'):
         df[obj_col] = df[obj_col].astype('category')
 
@@ -50,16 +50,16 @@ def preprocess_categorical_data(df: pd.DataFrame, output_dir: str):
     for cat_col in df.select_dtypes('category'):
         df[cat_col] = label_encoder_dict[cat_col].fit_transform(df[cat_col])
 
-    save_label_encoders(label_encoder_dict, output_dir)
+    _save_label_encoders(label_encoder_dict, output_dir)
 
 
-def save_label_encoders(label_encoder_dict: defaultdict, output_dir: str):
+def _save_label_encoders(label_encoder_dict: defaultdict, output_dir: str):
     for label, encoder in label_encoder_dict.items():
         with open(os.path.join(output_dir, 'encoders', f"{label}.json"), 'w') as f:
             json.dump(list(encoder.classes_), f)
 
 
-def impute_data(df: pd.DataFrame):
+def _impute_data(df: pd.DataFrame):
     for float_col in df.select_dtypes('float64'):
         df[float_col].fillna(df[float_col].mean(), inplace=True)
 
@@ -67,7 +67,7 @@ def impute_data(df: pd.DataFrame):
         df[col].fillna(df[col].mode().iloc[0], inplace=True)
 
 
-def train_log_regression_model(df: pd.DataFrame) -> LogisticRegressionCV:
+def _train_log_regression_model(df: pd.DataFrame) -> LogisticRegressionCV:
     log.info("Training model...")
 
     X = df.drop(columns=['Survived'])
@@ -85,7 +85,7 @@ def train_log_regression_model(df: pd.DataFrame) -> LogisticRegressionCV:
     return search.best_estimator_
 
 
-def save_model(model: LogisticRegressionCV, df: pd.DataFrame, output_dir: str):
+def _save_model(model: LogisticRegressionCV, df: pd.DataFrame, output_dir: str):
     log.info("Saving model...")
 
     coefs = dict(zip(df.drop(columns=['Survived']).columns, model.coef_[0]))
