@@ -19,6 +19,13 @@ log.addHandler(log_handler)
 
 
 def train_model(train_data_file: str, output_dir: str):
+    """
+    Performs training of logistic regression and saves model.
+
+    :param train_data_file: file with train data in CSV format.
+    :param output_dir: folder, where results will be stored.
+    :rtype: None
+    """
     log.info("Start processing.")
 
     df = pd.read_csv(train_data_file)
@@ -39,6 +46,7 @@ def _preprocess_dataframe(df: pd.DataFrame, output_dir: str):
 
 
 def _preprocess_categorical_data(df: pd.DataFrame, output_dir: str):
+    """Imputes and encode categorical data."""
     for obj_col in df.select_dtypes('object'):
         df[obj_col] = df[obj_col].astype('category')
 
@@ -54,6 +62,7 @@ def _preprocess_categorical_data(df: pd.DataFrame, output_dir: str):
 
 
 def _save_label_encoders(label_encoder_dict: defaultdict, output_dir: str):
+    """Save encoders in output_dir/encoders folder"""
     for label, encoder in label_encoder_dict.items():
         with open(os.path.join(output_dir, 'encoders', f"{label}.json"), 'w') as f:
             json.dump(list(encoder.classes_), f)
